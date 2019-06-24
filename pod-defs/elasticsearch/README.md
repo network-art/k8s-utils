@@ -1,5 +1,4 @@
-# Adapted by [Elasticsearch for Kubernetes](https://github.com/kubernetes/examples/tree/master/staging/elasticsearch)
----
+# Adapted from [Elasticsearch for Kubernetes](https://github.com/kubernetes/examples/tree/master/staging/elasticsearch)
 * __service-account.yaml__: Definition of ServiceAccount resource (with name elasticsearch).
 * __es-svc.yaml__: Definition of Service resource (with name elasticsearch).
 * __es-rc.yaml__: Definition of Replication Controller (with name es).
