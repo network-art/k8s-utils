@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Pods"
+echo "----"
+kubectl get pods $@

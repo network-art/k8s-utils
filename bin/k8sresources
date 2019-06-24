@@ -1,0 +1,39 @@
+#!/bin/sh
+
+args=$@
+
+echo "Pods"
+echo "----"
+kubectl get pods ${args}
+echo
+
+echo "Services"
+echo "--------"
+kubectl get services
+echo
+
+echo "ServiceAccounts"
+echo "---------------"
+kubectl get serviceaccounts
+echo
+
+echo "Deployments"
+echo "-----------"
+kubectl get deployments
+echo
+
+echo "ReplicationControllers"
+echo "----------------------"
+kubectl get replicationcontrollers
+echo
+
+echo "Roles"
+echo "-----"
+kubectl get roles
+echo
+
+echo "RoleBindings"
+echo "------------"
+kubectl get rolebindings
+echo
+
