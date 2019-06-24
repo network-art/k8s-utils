@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curler-pod
+spec:
+  containers:
+    - name: curler-pod
+      image: governmentpaas/curl-ssl
+      command: ["/bin/sh", "-ec", "for i in 1 2 3 4 5; do echo; echo 'Fetch Attempt ' $i; /usr/bin/curl -D '/dev/stderr' http://tunga.networkart.com:8080/typicode/demo/posts || true; if [ $? -eq 0 ]; then /bin/sleep 2; else /bin/sleep 5; fi; echo; done"]
+  restartPolicy: Never
