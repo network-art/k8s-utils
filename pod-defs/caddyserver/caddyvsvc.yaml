@@ -9,11 +9,8 @@ spec:
   - k8scaddy.arena.networkart.com
   - k8scaddyint.arena.networkart.com
   http:
-  - match:
-    - uri:
-        exact: /
-    route:
-      - destination:
-          host: k8scaddy
-          port:
-            number: 80
+  - route:
+    - destination:
+        host: k8scaddy
+        port:
+        number: 80
