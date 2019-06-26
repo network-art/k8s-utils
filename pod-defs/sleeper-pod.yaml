@@ -6,5 +6,5 @@ spec:
   containers:
     - name: sleeper-pod
       image: governmentpaas/curl-ssl
-      command: ["/bin/sh", "-ec", "for i in 1 2 3 4 5; do echo $(date); netstat -tan | grep 15001; done && /bin/sleep 3650d;"]
+      command: ["/bin/sleep", "3650d"]
   restartPolicy: Never

@@ -8,9 +8,8 @@ metadata:
 spec:
   containers:
   - command:
-    - /bin/sh
-    - -ec
-    - for i in 1 2 3 4 5; do echo $(date); netstat -tan | grep 15001; sleep 1; done && /bin/sleep 3650d;
+    - /bin/sleep
+    - 3650d
     image: governmentpaas/curl-ssl
     name: sleeper-pod-wisc
     resources: {}
