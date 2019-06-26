@@ -37,3 +37,18 @@ echo "------------"
 kubectl get rolebindings
 echo
 
+echo "Gateways (namespace=default)"
+echo "----------------------------"
+kubectl get gateways
+echo
+
+echo "Gateways (namespace=istio-system)"
+echo "---------------------------------"
+kubectl get gateways -n istio-system
+echo
+
+echo "VirtualServices"
+echo "---------------"
+kubectl get virtualservices
+echo
+

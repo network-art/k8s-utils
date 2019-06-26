@@ -1,3 +1,4 @@
+#!/bin/sh
 # This file needs to be sourced from your .bash_profile.
 # For example, in your .bash_profile
 # a) Include the following segment
