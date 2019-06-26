@@ -6,7 +6,8 @@ spec:
   gateways:
   - caddygw
   hosts:
-  - "*"
+  - k8scaddy.arena.networkart.com
+  - k8scaddyint.arena.networkart.com
   http:
   - match:
     - uri:
