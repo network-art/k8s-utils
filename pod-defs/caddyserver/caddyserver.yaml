@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddypod
+spec:
+  selector:
+    matchLabels:
+      app: caddypod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: caddypod
+    spec:
+      containers:
+      - name: caddypod
+        image: abiosoft/caddy
+        command: ["/bin/sh", "-ec", "/usr/bin/caddy -version; /usr/bin/caddy -plugins; /usr/bin/caddy -port 80 -http-port 80"]
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8scaddy
+  labels:
+    app: k8scaddy
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: caddypod
