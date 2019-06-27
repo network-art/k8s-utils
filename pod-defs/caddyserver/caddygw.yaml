@@ -12,6 +12,14 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - k8scaddy.arena.networkart.com
-    - k8scaddyint.arena.networkart.com
-
+    - "k8scaddy.arena.networkart.com"
+    - "k8scaddyint.arena.networkart.com"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "k8scaddy.arena.networkart.com"
+    - "k8scaddyint.arena.networkart.com"
+    tls:
+      mode: PASSTHROUGH
