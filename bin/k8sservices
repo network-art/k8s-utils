@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Services"
+echo "--------"
+kubectl get services $@
