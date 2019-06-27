@@ -28,6 +28,7 @@ spec:
         name: caddypod
         ports:
         - containerPort: 80
+        - containerPort: 443
         resources: {}
       - args:
         - proxy
@@ -61,7 +62,7 @@ spec:
         - --statusPort
         - "15020"
         - --applicationPorts
-        - "80"
+        - 80,443
         env:
         - name: POD_NAME
           valueFrom:
@@ -86,7 +87,7 @@ spec:
         - name: ISTIO_META_INTERCEPTION_MODE
           value: REDIRECT
         - name: ISTIO_META_INCLUDE_INBOUND_PORTS
-          value: "80"
+          value: 80,443
         - name: ISTIO_METAJSON_LABELS
           value: |
             {"app":"caddypod"}
@@ -133,7 +134,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - 80,443
         - -d
         - "15020"
         image: docker.io/istio/proxy_init:1.2.0
@@ -171,6 +172,10 @@ metadata:
 spec:
   ports:
   - port: 80
+    name: http
+    protocol: TCP
+  - port: 443
+    name: https
     protocol: TCP
   selector:
     app: caddypod
