@@ -1,18 +1,16 @@
 # This file needs to be sourced from your .bash_profile.
 
-CALICO_DATASTORE_TYPE=kubernetes
-# Set the ETCD endpoint here to the appropriate k8s host
-# CALICO_ETCD_ENDPOINTS=http://<your-k8s-host>:2379
-CALICO_KUBECONFIG=$HOME/.kube/config
+CALICO_ETCD_PORT="${CALICO_ETCD_PORT:-2379}"
+CALICO_DATASTORE_TYPE="${CALICO_DATASTORE_TYPE:-kubernetes}"
+CALICO_ETCD_ENDPOINTS="${CALICO_ETCD_ENDPOINTS:-http://${HOSTNAME}:${CALICO_ETCD_PORT}}"
+CALICO_KUBECONFIG="${CALICO_KUBECONFIG:-$HOME/.kube/config}"
 
-HELM_HOME=$HOME/.helm
-
-# Point to your istio location.
-PATH=$PATH:$HOME/istio/istio-1.2.0/bin
+HELM_HOME="${HELM_HOME:-$HOME/.helm}"
 
 export CALICO_DATASTORE_TYPE
 export CALICO_ETCD_ENDPOINTS
 export CALICO_KUBECONFIG
 export HELM_HOME
 
+PATH=$PATH:$HOME/istio/istio-1.2.0/bin
 export PATH
