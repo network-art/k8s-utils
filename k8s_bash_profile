@@ -1,4 +1,7 @@
+#!/bin/bash
 # This file needs to be sourced from your .bash_profile.
+
+this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 CALICO_ETCD_PORT="${CALICO_ETCD_PORT:-2379}"
 CALICO_DATASTORE_TYPE="${CALICO_DATASTORE_TYPE:-kubernetes}"
@@ -13,4 +16,5 @@ export CALICO_KUBECONFIG
 export HELM_HOME
 
 PATH=$PATH:$HOME/istio/istio-1.2.0/bin
+PATH=$PATH:${this_dir}/bin
 export PATH

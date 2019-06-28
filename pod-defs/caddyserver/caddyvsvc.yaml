@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: caddyvsvc
+spec:
+  gateways:
+  - caddygw
+  hosts:
+  - "k8scaddy.arena.networkart.com"
+  - "k8scaddyint.arena.networkart.com"
+  http:
+  - route:
+    - destination:
+        host: k8scaddy
+        port:
+        number: 80
+  https:
+  - route:
+    - destination:
+        host: k8scaddy
+        port:
+        number: 443

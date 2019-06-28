@@ -1,50 +1,35 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   creationTimestamp: null
-  labels:
-    component: elasticsearch
-    role: data
-  name: es-data
+  name: caddypod
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: caddypod
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"761ebc5a63976754715f22fcf548f05270fb4b8db07324894aebdb31fa81d960","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        component: elasticsearch
-        role: data
+        app: caddypod
     spec:
       containers:
-      - env:
-        - name: KUBERNETES_CA_CERTIFICATE_FILE
-          value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: CLUSTER_NAME
-          value: myesdb
-        - name: NODE_MASTER
-          value: "false"
-        - name: HTTP_ENABLE
-          value: "false"
-        image: quay.io/pires/docker-elasticsearch-kubernetes:1.7.1-4
-        name: es-data
+      - command:
+        - /bin/sh
+        - -ec
+        - /usr/bin/caddy -version; /usr/bin/caddy -plugins; /usr/bin/caddy -port 80
+          -http-port 80
+        image: abiosoft/caddy
+        imagePullPolicy: IfNotPresent
+        name: caddypod
         ports:
-        - containerPort: 9300
-          name: transport
-          protocol: TCP
+        - containerPort: 80
+        - containerPort: 443
         resources: {}
-        securityContext:
-          capabilities:
-            add:
-            - IPC_LOCK
-        volumeMounts:
-        - mountPath: /data
-          name: storage
       - args:
         - proxy
         - sidecar
@@ -55,7 +40,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - es-data.default
+        - caddypod.$(POD_NAMESPACE)
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -77,7 +62,7 @@ spec:
         - --statusPort
         - "15020"
         - --applicationPorts
-        - "9300"
+        - 80,443
         env:
         - name: POD_NAME
           valueFrom:
@@ -102,10 +87,10 @@ spec:
         - name: ISTIO_META_INTERCEPTION_MODE
           value: REDIRECT
         - name: ISTIO_META_INCLUDE_INBOUND_PORTS
-          value: "9300"
+          value: 80,443
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"component":"elasticsearch","role":"data"}
+            {"app":"caddypod"}
         image: docker.io/istio/proxyv2:1.2.0
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -122,11 +107,11 @@ spec:
           periodSeconds: 2
         resources:
           limits:
-            cpu: 100m
-            memory: 512Mi
+            cpu: "2"
+            memory: 1Gi
           requests:
-            cpu: 50m
-            memory: 256Mi
+            cpu: 100m
+            memory: 128Mi
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 1337
@@ -149,7 +134,7 @@ spec:
         - -x
         - ""
         - -b
-        - "9300"
+        - 80,443
         - -d
         - "15020"
         image: docker.io/istio/proxy_init:1.2.0
@@ -168,10 +153,7 @@ spec:
             - NET_ADMIN
           runAsNonRoot: false
           runAsUser: 0
-      serviceAccount: elasticsearch
       volumes:
-      - emptyDir: {}
-        name: storage
       - emptyDir:
           medium: Memory
         name: istio-envoy
@@ -179,6 +161,22 @@ spec:
         secret:
           optional: true
           secretName: istio.default
-status:
-  replicas: 0
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8scaddy
+  labels:
+    app: k8scaddy
+spec:
+  ports:
+  - port: 80
+    name: http
+    protocol: TCP
+  - port: 443
+    name: https
+    protocol: TCP
+  selector:
+    app: caddypod
 ---
